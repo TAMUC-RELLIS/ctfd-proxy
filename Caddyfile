@@ -1,0 +1,33 @@
+# caddy reverse proxy config for CTFd example
+
+# we need to map the public facing URL to the container
+#
+#		[subdomain].domain.tld <==> ctfd_container:8000
+#
+# NOTE: CTFd container should be started before the caddy
+
+ctf.example.org {
+
+	# docker-compose creates the cotainer names in the format
+	#
+	# 		project_image_1
+	#
+	# the project is usually the folder name you cloned CTFd repo into
+	
+    reverse_proxy ctfd_ctfd_1:8000
+
+    # if you are running the CTFd without docker compose, use localhost
+
+    reverse_proxy localhost:8000
+}
+
+# caddy will be mapping ports 80 and 443 from docker to the localhost
+# caddy will automatically setup SSL and redirect HTTP traffic to HTTPS
+
+# you can add caddy reverse proxy for other applications in the same config
+
+node-app.example.org {
+	reverse_proxy localhost:3000
+}
+
+# for more information, visit https://caddyserver.com/docs/caddyfile
